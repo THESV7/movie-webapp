@@ -1,4 +1,4 @@
-const adultRegex = /\b(porn|porno|pornography|xxx|erotica|erotic|softcore|bdsm|nympho|incest|kamasutra)\b/i;
+const adultRegex = /\b(porn|porno|pornography|xxx|erotica|erotic|softcore|bdsm|nympho|incest|kamasutra|sex|sexy)\b/i;
 
 export const filterAdult = (results) => {
   if (!results || !Array.isArray(results)) return [];
