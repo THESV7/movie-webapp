@@ -5,7 +5,4 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  server: {
-    historyApiFallback: true, // 👈 ensures deep routes like /movie work on reload
-  },
 })

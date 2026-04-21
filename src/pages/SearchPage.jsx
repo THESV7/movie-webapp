@@ -119,9 +119,9 @@ const SearchPage = () => {
         )}
 
         {loading && page === 1 ? (
-          <div className="w-full flex justify-center items-center h-32 text-white">
-            <div className="animate-spin rounded-full border-4 border-white border-t-red-500 w-10 h-10 mr-3"></div>
-            <span>Loading results...</span>
+          <div className="fixed inset-0 z-50 flex justify-center items-center bg-black text-white">
+            <div className="animate-spin rounded-full border-4 border-white border-t-red-500 w-12 h-12 mr-3"></div>
+            <span className="text-lg">Loading results...</span>
           </div>
         ) : (
           <div className="grid grid-cols-[repeat(auto-fit,230px)] gap-6 justify-center lg:justify-start">

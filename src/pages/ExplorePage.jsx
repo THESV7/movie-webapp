@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import Card from "../components/Card";
 
 const ExplorePage = () => {
@@ -14,7 +14,7 @@ const ExplorePage = () => {
   const fetchData = async (overridePage = null) => {
     const currentPage = overridePage ?? pageNo;
 
-    if (loading || !params.explore) return;
+    if (loading || !params.explore || (params.explore !== "tv" && params.explore !== "movie")) return;
     if (totalPageNo > 0 && currentPage > totalPageNo) return;
 
     try {
@@ -79,9 +79,13 @@ const ExplorePage = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, pageNo, totalPageNo]);
 
+  if (params.explore !== "tv" && params.explore !== "movie") {
+    return <Navigate to="/" replace />;
+  }
+
   if (initialLoading) {
     return (
-      <div className="w-screen h-screen flex items-center justify-center bg-black text-white">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black text-white">
         <div className="animate-spin rounded-full border-4 border-white border-t-red-500 w-12 h-12"></div>
         <p className="ml-4">Loading...</p>
       </div>
@@ -92,7 +96,7 @@ const ExplorePage = () => {
     <div className="py-16">
       <div className="container mx-auto">
         <h3 className="capitalize text-lg lg:text-xl font-semibold m-2 my-3">
-          Popular {params.explore} Show
+          Popular {params.explore === "tv" ? "TV Shows" : "Movies"}
         </h3>
 
         <div className="grid grid-cols-[repeat(auto-fit,230px)] gap-6 justify-center">

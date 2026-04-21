@@ -35,7 +35,7 @@ const Card = ({ data,trending,index,media_type }) => {
             <h2 className="text-ellipsis line-clamp-1 text-lg font-semibold">{data?.title || data?.name}</h2>
             <div className="text-sm text-neutral-400 flex justify-between items-center">
                 <p>{ moment(data?.release_date || data?.first_air_date).format("MMMM Do YYYY") }</p>
-                <p className="bg-black px-1 rounded-full text-xs text-white">Rating : {Number(data.vote_average).toFixed(1)}</p>
+                <p className="bg-black px-1 rounded-full text-xs text-white">Rating : {Number(data?.vote_average ?? 0).toFixed(1)}</p>
             </div>
         </div>
     </Link>

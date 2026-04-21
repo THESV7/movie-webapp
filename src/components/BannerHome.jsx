@@ -24,35 +24,38 @@ const BannerHome = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             if (currentImage < bannerData.length - 1) {
-                setIsTransitioning(true);
                 handleNext();
             } else {
                 setIsTransitioning(false);
                 setCurrentImage(0);
+                setTimeout(() => {
+                    setIsTransitioning(true);
+                }, 50);
             }
         }, 5000);
 
         return () => clearInterval(interval);
     }, [bannerData, currentImage]);
-    
+
+    if (!bannerData.length || !imageURL) return null;
 
     return (
-        <section className="w-full h-full">
-            <div className="flex min-h-full max-h-[95vh] overflow-hidden">
+        <section className="w-full h-[450px] lg:h-[80vh]">
+            <div className="flex h-full w-full overflow-hidden">
                 {bannerData.map((data, index) => {
                     // console.log("data",data);
 
                     return (
                         <div
                             key={data.id + "bannerHome" + index}
-                            className={`min-w-full min-h-[450px] lg:min-h-full overflow-hidden relative group ${isTransitioning ? "transition-all" : ""
+                            className={`min-w-full h-full overflow-hidden relative group ${isTransitioning ? "transition-all" : ""
                                 } `}
                             style={{ transform: `translateX(-${currentImage * 100}%)` }}
                         >
                             <div className="w-full h-full">
                                 <img
                                     src={imageURL + data.backdrop_path}
-                                    alt=""
+                                    alt={data.name || data.title}
                                     className="h-full w-full object-cover"
                                 />
                             </div>
@@ -84,7 +87,7 @@ const BannerHome = () => {
                                         {data.overview}
                                     </p>
                                     <div className="flex items-center gap-4">
-                                        <p>Rating : {Number(data.vote_average).toFixed(1)}+</p>
+                                        <p>Rating : {Number(data?.vote_average ?? 0).toFixed(1)}+</p>
                                         <span>|</span>
                                         <p>View : {Number(data.popularity).toFixed(0)}</p>
                                     </div>

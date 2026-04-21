@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import useFetchDetails from "../hooks/useFetchDetails";
 import { useSelector } from "react-redux";
 import moment from "moment";
@@ -31,22 +31,28 @@ const DetailsPage = () => {
     window.scrollTo({ top: 0 });
   }, [params.id, params.explore]);
 
+  if (params.explore !== "tv" && params.explore !== "movie") {
+    return <Navigate to="/" replace />;
+  }
+
   if (isInitialLoading) {
     return (
-      <div className="h-screen w-full flex justify-center items-center text-white bg-black">
+      <div className="fixed inset-0 z-50 flex justify-center items-center text-white bg-black">
         <div className="animate-spin rounded-full border-4 border-white border-t-red-500 w-10 h-10 mr-3"></div>
         <span className="text-lg">Loading {params?.explore} details...</span>
       </div>
     );
   }
 
-  const hours = Math.floor(data?.runtime / 60);
-  const minutes = data?.runtime % 60;
+  const hours = Math.floor((data?.runtime || 0) / 60);
+  const minutes = (data?.runtime || 0) % 60;
 
   const writerJobs = ["Writer", "Screenplay", "Story"];
   const writer = [...new Set(
     castData?.crew?.filter(el => writerJobs.includes(el?.job))?.map(el => el?.name)
   )].join(", ");
+
+  const director = castData?.crew?.filter(el => el?.job === "Director")?.map(el => el?.name)?.join(", ");
 
   return (
     <div>
@@ -88,11 +94,11 @@ const DetailsPage = () => {
           <Divider />
 
           <div className="flex items-center gap-3 text-base max-[390px]:text-sm max-[350px]:text-xs">
-            <p>Rating : {Number(data?.vote_average).toFixed(1)}+</p>
+            <p>Rating : {Number(data?.vote_average ?? 0).toFixed(1)}+</p>
             <span>|</span>
-            <p>Votes : {Number(data?.vote_count)}</p>
+            <p>Votes : {Number(data?.vote_count ?? 0)}</p>
             <span>|</span>
-            <p>Duration : {hours}h {minutes}m</p>
+            <p>Duration : {params?.explore === "movie" ? `${hours}h ${minutes}m` : `${data?.number_of_seasons || 0} Season(s) ${data?.number_of_episodes || 0} Episode(s)`}</p>
           </div>
 
           <Divider />
@@ -105,14 +111,18 @@ const DetailsPage = () => {
           <div className="flex items-center gap-3 my-3 text-center text-base max-[390px]:text-sm max-[350px]:text-xs">
             <p>Status : {data?.status}</p>
             <span>|</span>
-            <p>Release date : {moment(data?.release_date).format("MMMM Do YYYY")}</p>
-            <span>|</span>
-            <p>Revenue : {Number(data?.revenue)}</p>
+            <p>Release date : {moment(data?.release_date || data?.first_air_date).format("MMMM Do YYYY")}</p>
+            {params?.explore === "movie" && (
+              <>
+                <span>|</span>
+                <p>Revenue : {Number(data?.revenue)}</p>
+              </>
+            )}
           </div>
 
           <Divider />
 
-          <p><span className="text-white">Director :</span> {castData?.crew?.[0]?.name}</p>
+          <p><span className="text-white">Director :</span> {director}</p>
           <Divider />
           <p><span className="text-white">Writer :</span> {writer}</p>
 

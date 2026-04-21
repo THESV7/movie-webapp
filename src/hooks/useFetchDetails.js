@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 const useFetchDetails = (endpoint) => {
   const [data, setData] = useState();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
