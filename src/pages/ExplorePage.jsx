@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
+import { filterAdult } from "../utils/filterAdult";
 import Card from "../components/Card";
 
 const ExplorePage = () => {
@@ -21,10 +22,14 @@ const ExplorePage = () => {
       setLoading(true);
 
       const response = await axios.get(`/discover/${params.explore}`, {
-        params: { page: currentPage },
+        params: { 
+          page: currentPage,
+          include_adult: false,
+          without_keywords: "325693|155477|445|256466|267122|321739|33841|190330|9840|9714|11115|207611" // Blocks erotica, softcore, sex, etc.
+        },
       });
 
-      const newResults = response.data.results || [];
+      const newResults = filterAdult(response.data.results);
 
       setData((prev) => {
         const combined = [...prev, ...newResults];

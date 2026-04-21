@@ -12,6 +12,12 @@ import { store } from './store/store.js'
 axios.defaults.baseURL = "https://api.themoviedb.org/3"
 axios.defaults.headers.common['Authorization'] = `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`
 
+axios.interceptors.request.use((config) => {
+  config.params = config.params || {};
+  config.params.include_adult = false;
+  return config;
+});
+
 createRoot(document.getElementById('root')).render(
   // <StrictMode>
   <Provider store={store}>

@@ -6,6 +6,7 @@ import axios from "axios"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { setBannerData, setImageURL } from "./store/movieSlice"
+import { filterAdult } from "./utils/filterAdult"
 import "./App.css"
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
   const fetchTrendingData = async() =>{
     try {
       const response = await axios.get('/trending/all/week')
-      dispatch(setBannerData(response.data.results))
+      dispatch(setBannerData(filterAdult(response.data.results)))
     } catch (error) {
       console.log("error",error);
       

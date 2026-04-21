@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Card from "../components/Card";
+import { filterAdult } from "../utils/filterAdult";
 
 const SearchPage = () => {
   const location = useLocation();
@@ -29,7 +30,7 @@ const SearchPage = () => {
         },
       });
 
-      const newResults = response.data.results || [];
+      const newResults = filterAdult(response.data.results);
 
       if (reset) {
         setHasMore(newResults.length > 0);
