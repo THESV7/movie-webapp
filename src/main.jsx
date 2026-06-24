@@ -9,7 +9,7 @@ import { Provider } from 'react-redux'
 import { store } from './store/store.js'
 
 /***** setup axios *****/ 
-axios.defaults.baseURL = "https://api.themoviedb.org/3"
+axios.defaults.baseURL = "/tmdb"
 axios.defaults.headers.common['Authorization'] = `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`
 
 axios.interceptors.request.use((config) => {

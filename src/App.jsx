@@ -5,7 +5,7 @@ import MobileNavigation from "./components/MobileNavigation"
 import axios from "axios"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { setBannerData, setImageURL } from "./store/movieSlice"
+import { setBannerData, setImageURL, setError } from "./store/movieSlice"
 import { filterAdult } from "./utils/filterAdult"
 import "./App.css"
 
@@ -16,9 +16,10 @@ function App() {
     try {
       const response = await axios.get('/trending/all/week')
       dispatch(setBannerData(filterAdult(response.data.results)))
+      dispatch(setError(false))
     } catch (error) {
       console.log("error",error);
-      
+      dispatch(setError(true))
     }
   }
 
@@ -26,8 +27,10 @@ function App() {
     try {
       const response = await axios.get("/configuration")
       dispatch(setImageURL(response.data.images.secure_base_url + "original"))
+      dispatch(setError(false))
     } catch (error) {
-      
+      console.log("error", error);
+      dispatch(setError(true))
     }
   }
 
